@@ -204,8 +204,11 @@ if (downloadRaylib) then
         
         includedirs { "../src" }
         includedirs { "../include" }
+        includedirs { "../libs/lua/lua-5.4.8/src" }  -- Add this line
 
-        links {"raylib"}
+
+        links {"raylib", "lua"} -- Add "lua" to links what file doi do this
+
 
         cdialect "C17"
         cppdialect "C++17"
@@ -302,3 +305,33 @@ if (downloadRaylib) then
             compileas "Objective-C"
 
         filter{}
+
+        -- Lua Static Library Project
+        project "lua"
+            kind "StaticLib"
+            language "C"
+            location "build_files/"
+            targetdir "../bin/%{cfg.buildcfg}"
+            
+            files { 
+                "../libs/lua/lua-5.4.8/src/*.c"
+            }
+            
+            -- Exclude Lua interpreter and compiler (we only want the library)
+            removefiles {
+                "../libs/lua/lua-5.4.8/src/lua.c",
+                "../libs/lua/lua-5.4.8/src/luac.c"
+            }
+            
+            includedirs { "../libs/lua/lua-5.4.8/src" }
+            
+            filter "system:linux"
+                defines { "LUA_USE_LINUX" }
+            
+            filter "system:macosx"
+                defines { "LUA_USE_MACOSX" }
+            
+            filter "system:windows"
+                defines { "LUA_USE_WINDOWS" }
+            
+            filter {}
