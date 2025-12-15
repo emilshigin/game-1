@@ -40,23 +40,23 @@ int main ()
 
 	// Create the window with Lua settings
 	InitWindow(settings.screenWidth, settings.screenHeight, "Game 1");
-	SetTargetFPS(settings.targetFPS);
-
+	if (settings.enabledVSync) SetTargetFPS(60); else SetTargetFPS(0);
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
 
 	// Load a texture from the resources directory
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
-	Vector2 position = { 0.0f, (float)settings.screenHeight/2 - (float)wabbit.height/2 };
+	Vector2 player = { 0.0f, (float)settings.screenHeight/2 - (float)wabbit.height/2 };
 
 	// Set the target FPS
-	int fps = settings.targetFPS;
+	int fps = 0;
+	float speed = 250;
 	
 	// Game Loop
 	// run the loop until the user presses ESCAPE or presses the Close button on the window
 	while (!WindowShouldClose())
 	{
-		position = input(position, settings.playerSpeed);
+		player = input(player, speed);
 
 		// drawing
 		BeginDrawing();
@@ -70,10 +70,10 @@ int main ()
 			// draw some text using the default font
 			DrawText("Game Start", 200,200,20,WHITE);
 			DrawText(TextFormat("FPS: %d",fps), 200,240,20,WHITE);
-			DrawText(TextFormat("Speed: %.0f",settings.playerSpeed), 200,260,20,WHITE);
+			DrawText(TextFormat("Speed: %.0f",speed), 200,260,20,WHITE);
 
 			// draw our texture to the screen
-			DrawTexture(wabbit, position.x,position.y, WHITE);
+			DrawTexture(wabbit, player.x,player.y, WHITE);
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();

@@ -8,8 +8,7 @@
 typedef struct GameSettings {
     int screenWidth;
     int screenHeight;
-    float playerSpeed;
-    int targetFPS;
+    int enabledVSync;
 } GameSettings;
 
 // Initialize Lua state

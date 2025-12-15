@@ -12,8 +12,7 @@ GameSettings Lua_LoadSettings(lua_State* L, const char* filepath) {
     GameSettings settings = {
         .screenWidth = 1280,
         .screenHeight = 720,
-        .playerSpeed = 200.0f,
-        .targetFPS = 60
+        .enabledVSync = 0,
     };
     
     // Load and execute Lua file
@@ -34,12 +33,8 @@ GameSettings Lua_LoadSettings(lua_State* L, const char* filepath) {
         if (lua_isinteger(L, -1)) settings.screenHeight = lua_tointeger(L, -1);
         lua_pop(L, 1);
         
-        lua_getfield(L, -1, "playerSpeed");
-        if (lua_isnumber(L, -1)) settings.playerSpeed = lua_tonumber(L, -1);
-        lua_pop(L, 1);
-        
-        lua_getfield(L, -1, "targetFPS");
-        if (lua_isinteger(L, -1)) settings.targetFPS = lua_tointeger(L, -1);
+        lua_getfield(L, -1, "enabledVSync");
+        if (lua_isnumber(L, -1)) settings.enabledVSync = lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
     lua_pop(L, 1);  // Pop settings table
