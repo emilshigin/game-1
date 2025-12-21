@@ -43,20 +43,38 @@ int main ()
 	if (settings.enabledVSync) SetTargetFPS(60); else SetTargetFPS(0);
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
-
+	
+	
+	
 	// Load a texture from the resources directory
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 	Vector2 player = { 0.0f, (float)settings.screenHeight/2 - (float)wabbit.height/2 };
-
+	
+	Texture house = LoadTexture("house_1_floor_planes_example.png");
+	Vector2 house_1 = { 0.0f, (float)settings.screenHeight/2 - (float)house.height/2 };
+	
+	// Camera setup
+	Camera2D camera = { 0 };
+    camera.target = (Vector2){ player.x + 20.0f, player.y + 20.0f };
+    camera.offset = (Vector2){ settings.screenWidth/2.0f, settings.screenHeight/2.0f };
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+	
 	// Set the target FPS
 	int fps = 0;
 	float speed = 250;
+
+	// Get the mouse cursor
+	int cursor_x = GetMouseX();
+	int cursor_y = GetMouseY();
 	
 	// Game Loop
 	// run the loop until the user presses ESCAPE or presses the Close button on the window
 	while (!WindowShouldClose())
 	{
+		// player input
 		player = input(player, speed);
+		camera.target = (Vector2){ player.x + 20, player.y + 20 };
 
 		// drawing
 		BeginDrawing();
@@ -64,15 +82,21 @@ int main ()
 			// Setup the back buffer for drawing (clear color and depth buffers)
 			ClearBackground(BLACK);
 
-			// Get FPS
-			fps =  GetFPS();
+			// draw some text using the default font			
+			if (settings.enabledDebug){
+				fps =  GetFPS();
+				DrawText(TextFormat("FPS: %d",fps), 20,20,20,WHITE);
+				DrawText(TextFormat("Speed: %.0f",speed), 20,40,20,WHITE);
+				cursor_x = GetMouseX();
+				cursor_y = GetMouseY();
+				DrawText(TextFormat("Cursor x,y: %d,%d",cursor_x,cursor_y), 20,60,20,WHITE);
+			}
+			
+			// Camera target follows player
 
-			// draw some text using the default font
-			DrawText("Game Start", 200,200,20,WHITE);
-			DrawText(TextFormat("FPS: %d",fps), 200,240,20,WHITE);
-			DrawText(TextFormat("Speed: %.0f",speed), 200,260,20,WHITE);
 
 			// draw our texture to the screen
+			DrawTexture(house, house_1.x+600, house_1.y, WHITE);
 			DrawTexture(wabbit, player.x,player.y, WHITE);
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
