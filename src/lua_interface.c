@@ -36,6 +36,10 @@ GameSettings Lua_LoadSettings(lua_State* L, const char* filepath) {
         lua_getfield(L, -1, "enabledVSync");
         if (lua_isnumber(L, -1)) settings.enabledVSync = lua_tonumber(L, -1);
         lua_pop(L, 1);
+
+        lua_getfield(L, -1, "enabledDebug");
+        if (lua_isnumber(L, -1)) settings.enabledDebug = lua_tonumber(L, -1);
+        lua_pop(L, 1);
     }
     lua_pop(L, 1);  // Pop settings table
     

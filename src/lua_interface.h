@@ -9,6 +9,7 @@ typedef struct GameSettings {
     int screenWidth;
     int screenHeight;
     int enabledVSync;
+    int enabledDebug;
 } GameSettings;
 
 // Initialize Lua state

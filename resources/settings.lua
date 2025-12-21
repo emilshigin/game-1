@@ -3,6 +3,7 @@ settings = {
     screenWidth = 1280,
     screenHeight = 720,
     enabledVSync = 0,
+    enabledDebug = 1,
 }
 
 print("Settings loaded from Lua!")
